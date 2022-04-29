@@ -90,12 +90,12 @@ CREATE TABLE scientific_field (
        PRIMARY KEY (title)
 );    
 
-CREATE TABLE project_scientific_field (
+CREATE TABLE project_relates_to_scientific_field (
        project_id INT UNSIGNED NOT NULL,
        scientific_field_title VARCHAR(100) NOT NULL,
        PRIMARY KEY (project_id, scientific_field_title),
-       CONSTRAINT project_scientific_field_to_project_foreign_key FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE ON UPDATE CASCADE,
-       CONSTRAINT project_scientific_field_to_scientific_field_foreign_key FOREIGN KEY (scientific_field_title) REFERENCES scientific_field(title) ON DELETE CASCADE ON UPDATE CASCADE
+       CONSTRAINT relates_to_project_foreign_key FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE ON UPDATE CASCADE,
+       CONSTRAINT relates_to_scientific_field_foreign_key FOREIGN KEY (scientific_field_title) REFERENCES scientific_field(title) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE researcher_participates_in_project (
@@ -104,4 +104,13 @@ CREATE TABLE researcher_participates_in_project (
        PRIMARY KEY (researcher_id, project_id),
        CONSTRAINT participates_to_researcher_foreign_key FOREIGN KEY (researcher_id) REFERENCES researcher(id) ON DELETE CASCADE ON UPDATE CASCADE,
        CONSTRAINT participates_to_project_foreign_key FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE deliverable (
+       title VARCHAR(200) NOT NULL,
+       project_id INT UNSIGNED NOT NULL,
+       abstract TEXT NOT NULL,
+       delivery_date DATE NOT NULL,
+       PRIMARY KEY (title, project_id),
+       CONSTRAINT deliverable_to_project_foreign_key FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE ON UPDATE CASCADE
 )
