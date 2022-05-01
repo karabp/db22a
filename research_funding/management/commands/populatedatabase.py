@@ -108,7 +108,7 @@ class Command(BaseCommand):
         project_ids_dict = mariadb_select_all('SELECT id FROM project', []);
         project_ids = [p['id'] for p in project_ids_dict]
         
-        participation_n = 10000
+        participation_n = 2000
         participations = []
         for _ in range(participation_n):
             participation = mock.generate_participation(researcher_ids, project_ids)

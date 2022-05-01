@@ -1,0 +1,16 @@
+<h1>Projects per researcher</h1>
+<ul>
+{% for researcher_projects in researcher_project_list %}
+  <li>
+    <div>
+      {{ researcher_projects.last_name }},
+      {{ researcher_projects.first_name }}
+    </div>
+    <ul>
+      {% for project_title in researcher_projects.project_titles %}
+      <li>{{ project_title }}</li>
+      {% endfor %}
+    </ul>
+  </li>
+{% endfor %}
+</ul>

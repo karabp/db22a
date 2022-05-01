@@ -1,3 +1,4 @@
+DROP VIEW IF EXISTS projects_per_researcher;
 DROP TABLE IF EXISTS deliverable;
 DROP TABLE IF EXISTS project_relates_to_scientific_field;
 DROP TABLE IF EXISTS researcher_participates_in_project;
