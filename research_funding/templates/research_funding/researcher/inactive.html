@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Inactive researchers{% endblock %}
+
+{% block content %}
+<h1>Inactive researchers</h1>
+<ul>
+{% for researcher in researchers %}
+  <li>
+    <div>
+      {{ researcher.last_name }},
+      {{ researcher.first_name }}:
+      {{ researcher.project_count }} inactive projects.
+    </div>
+  </li>
+{% endfor %}
+</ul>
+{% endblock %}

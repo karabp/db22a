@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Projects for scientific field {{ scientific_field.title}}{% endblock %}
+
+{% block content %}
+<h1>Projects for scientific field {{ scientific_field.title}}</h1>
+<p>
+  {{ scientific_field.description}}
+</p>
+<ul class="list-group list-group-flush">
+{% for project in project_researchers %}
+  <li class="list-group-item">
+    <div>
+      {{ project.project_title }} ({{ project.project_start_date }} to {{ project.project_end_date }})
+    </div>
+    <ul class="list-group list-group-flush">
+      {% for researcher in project.researchers %}
+      <li class="list-group-item">
+	{{ researcher.last_name }},
+	{{ researcher.first_name }}
+      </li>
+      {% endfor %}
+    </ul>
+  </li>
+{% endfor %}
+</ul>
+{% endblock %}

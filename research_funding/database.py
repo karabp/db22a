@@ -59,6 +59,7 @@ def mariadb_select_one(query, args):
     connection = mariadb_create_connection()
     try:
         with connection.cursor() as cursor:
+            print(cursor.mogrify(query, args))
             cursor.execute(query, args)
             result = cursor.fetchone()
     finally:
@@ -69,6 +70,7 @@ def mariadb_select_all(query, args):
     connection = mariadb_create_connection()
     try:
         with connection.cursor() as cursor:
+            print(cursor.mogrify(query, args))
             cursor.execute(query, args)
             result = cursor.fetchall()
     finally:

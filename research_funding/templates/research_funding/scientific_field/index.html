@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Scientific fields{% endblock %}
+
+{% block content %}
+<h1>Scientific fields</h1>
+<ol class='list-group list-group-flush'>
+{% for scientific_field in scientific_fields %}
+<li class='list-group-item'>
+    <div>{{ scientific_field.title}}</div>
+    <div>Description: {{ scientific_field.description }}</div>
+    <div>Projects: {{ scientific_field.project_count }}</div>
+    <div>
+      <a href="{% url 'scientific_field_projects_and_researchers' scientific_field.title|slugify %}">Active projects and researchers</a>
+    </div>
+  </li>
+{% endfor %}
+</ol>
+{% endblock %}

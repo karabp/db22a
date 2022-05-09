@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Top 5 funding amount to an organization by a manager{% endblock %}
+
+{% block content %}
+<h1>Top 5 funding amount to an organization by a manager</h1>
+<ul class='list-group list-group-flush'>
+{% for manager_organization in managers_organizations %}
+<li class='list-group-item'>
+  <div>{{ manager_organization.last_name }}, {{ manager_organization.first_name }}</div>
+  <div>{{ manager_organization.organization }}</div>
+  <div>{{ manager_organization.funding_amount }}</div>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Young researchers{% endblock %}
+
+{% block content %}
+<h1>Young researchers</h1>
+<ul>
+{% for researcher in researchers %}
+  <li>
+    <div>
+      {{ researcher.last_name }},
+      {{ researcher.first_name }},
+      {{ researcher.age }} :
+      {{ researcher.project_count }} active projects.
+    </div>
+  </li>
+{% endfor %}
+</ul>
+{% endblock %}

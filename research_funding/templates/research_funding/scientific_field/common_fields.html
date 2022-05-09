@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Top 3 scientific field pairs{% endblock %}
+
+{% block content %}
+<h1>Top 3 scientific field pairs</h1>
+<ul class='list-group list-group-flush'>
+{% for field_pair in fields %}
+<li class='list-group-item'>
+  <div>{{ field_pair.first_field }}</div>
+  <div>{{ field_pair.second_field }}</div>
+  <div>{{ field_pair.project_count }} common projects</div>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}
