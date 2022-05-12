@@ -1,16 +1,39 @@
-{% extends 'base.html' %}
+{% extends 'research_funding/base.html' %}
 
-{% block title %}Top 5 funding amount to an organization by a manager{% endblock %}
+{% block title %}Top 5 funding amounts to an organization by a manager{% endblock %}
 
-{% block content %}
-<h1>Top 5 funding amount to an organization by a manager</h1>
-<ul class='list-group list-group-flush'>
-{% for manager_organization in managers_organizations %}
-<li class='list-group-item'>
-  <div>{{ manager_organization.last_name }}, {{ manager_organization.first_name }}</div>
-  <div>{{ manager_organization.organization }}</div>
-  <div>{{ manager_organization.funding_amount }}</div>
-</li>
-{% endfor %}
-</ul>
+{% block link_managers %}active{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">Managers</li>
+<li class="breadcrumb-item active" aria-current="page">Highest Funding</li>
+{% endblock %}
+
+{% block main %}
+<h2>Top 5 funding amounts to an organization by a manager</h2>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+	<tr>
+          <th>Last name</th>
+          <th>First name</th>
+	  <th>Organization</th>
+          <th>Funding amount</th>
+	</tr>
+      </thead>
+      <tbody>
+	{% for manager_organization in managers_organizations %}
+	<tr>
+          <td>{{ manager_organization.last_name }}</td>
+          <td>{{ manager_organization.first_name }}</td>
+	  <td>{{ manager_organization.organization }}</td>
+	  <td>{{ manager_organization.funding_amount }}</td>
+	</tr>
+	{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}

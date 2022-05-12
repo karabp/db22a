@@ -1,23 +1,44 @@
-{% extends 'base.html' %}
+{% extends 'research_funding/base.html' %}
 
-{% block title %}Project per researcher{% endblock %}
+{% block title %}Projects per researcher{% endblock %}
 
-{% block content %}
-<h1>Projects per researcher</h1>
-<ul>
-{% for researcher_projects in researcher_project_list %}
-  <li>
-    <div>
-      {{ researcher_projects.last_name }},
-      {{ researcher_projects.first_name }},
-      {{ researcher_projects.age }}
-    </div>
-    <ul>
-      {% for project_title in researcher_projects.project_titles %}
-      <li>{{ project_title }}</li>
-      {% endfor %}
-    </ul>
-  </li>
-{% endfor %}
-</ul>
+{% block link_researchers %}active{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">Researchers</li>
+<li class="breadcrumb-item active" aria-current="page">Projects</li>
+{% endblock %}
+
+{% block main %}
+<h2>Projects per researcher</h2>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+	<tr>
+          <th>Last Name</th>
+          <th>First Name</th>
+	  <th>Age</th>
+          <th>Projects</th>
+	</tr>
+      </thead>
+      <tbody>
+	{% for researcher_projects in researcher_project_list %}
+	<tr>
+          <td>{{ researcher_projects.last_name }}</td>
+          <td>{{ researcher_projects.first_name }}</td>
+	  <td>{{ researcher_projects.age }}</td>
+          <td>
+	    <ul class='list-group'>
+	      {% for project_title in researcher_projects.project_titles %}
+	      <li class='list-group-item'>{{ project_title }}</li>
+	      {% endfor %}
+	    </ul>
+	  </td>
+	</tr>
+	{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}

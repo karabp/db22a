@@ -1,0 +1,21 @@
+{% extends 'research_funding/base.html' %}
+
+{% block title %}Project search{% endblock %}
+
+{% block content %}
+<h1>Project search</h1>
+<form>
+  <div class="form-group">
+    <label for="managerName">Manager name</label>
+    <select class="form-control" id="managerName" aria-describedby="managerNameHelp">
+      {% for manager in managers %}
+      <option>
+	{{ manager.first_name }} {{ manager.last_name }}
+      </option>
+      {% endfor %}
+    </select>
+    <small id="managerNameHelp" class="form-text text-muted">The manager of the project.</small>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

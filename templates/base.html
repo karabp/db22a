@@ -10,6 +10,7 @@
     <title>{% block title %}{% endblock %}</title>
   </head>
   <body>
+    {% block navbar %}{% endblock %}
     {% block content %}{% endblock %}
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="{% static 'js/jquery.min.js' %}" ></script>

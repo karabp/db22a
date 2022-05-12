@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.http import JsonResponse
+
 from research_funding import database, helpers
 
 import datetime
@@ -178,3 +180,28 @@ def managers_highest_funding(request):
         ''', [])
 
     return render(request, 'research_funding/manager/highest_funding.html', {'managers_organizations': managers_organizations})
+
+def project_search_json(request, pattern):
+    projects = database.mariadb_select_all(
+        '''
+        SELECT project.id, project.title FROM project
+        WHERE project.title LIKE %s
+
+        '''
+        , f'%{pattern}%')
+
+    return JsonResponse({'result': projects})
+
+def project_search_form(request):
+    managers = database.mariadb_select_all(
+        '''
+        SELECT manager.id,
+               person.first_name,
+               person.last_name
+        FROM manager
+        INNER JOIN person
+        ON manager.id = person.id
+        '''
+        , [])
+    
+    return render(request, 'research_funding/project/search_form.html', { 'managers': managers })
