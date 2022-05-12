@@ -1,0 +1,56 @@
+{% extends 'research_funding/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block link_home %}active{% endblock %}
+
+{% block home_breadcrumb %}
+<li class="breadcrumb-item active" aria-current="page">Home</li>
+{% endblock %}
+
+{% block main %}
+<h2>Site index</h2>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+	<tr>
+          <th>Category</th>
+          <th>Page</th>
+	  <th>Help</th>
+	</tr>
+      </thead>
+      <tbody>
+	<tr>
+          <td>General</td>
+	  <td>
+	    <a class="btn btn-primary active" role="button" aria-pressed="true" href="{% url 'home' %}">Home</a>
+	  </td>
+	  <td>This homepage.</td>
+	</tr>
+	<tr>
+          <td>Researchers</td>
+	  <td>
+	    <a class="btn btn-primary active" role="button" aria-pressed="true" href="{% url 'young_researchers' %}">Young researchers</a>
+	  </td>
+	  <td>A list of young (under 40) researchers, ranked by number of projects.</td>
+	</tr>
+	<tr>
+          <td>Researchers</td>
+	  <td>
+	    <a class="btn btn-primary active" role="button" aria-pressed="true" href="{% url 'inactive_researchers' %}">Inactive researchers</a>
+	  </td>
+	  <td>A list of researchers participating in 5 or more projects without deliverables, ranked by number of projects without deliverables.</td>
+	</tr>
+	<tr>
+          <td>Researchers, Projects</td>
+	  <td>
+	    <a class="btn btn-primary active" role="button" aria-pressed="true" href="{% url 'projects_per_researcher' %}">Projects per researcher</a>
+	  </td>
+	  <td>A list of projects for each researcher that participates in them.</td>
+	</tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

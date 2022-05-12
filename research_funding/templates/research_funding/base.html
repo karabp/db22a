@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block navbar %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Group 130 - Research Funding Application</a>
+  <a class="navbar-brand" href="{% url 'home' %}">Group 130 - Research Funding Application</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -9,7 +9,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item {% block link_home %}{% endblock %}">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span>
+	<a class="nav-link" href="{% url 'home' %}">Home</a>
 </a>
       </li>
       <li class="nav-item dropdown {% block link_researchers %}{% endblock %}">
@@ -48,7 +48,9 @@
 </nav>
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    {% block home_breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home'%}">Home</a></li>
+    {% endblock %}
     {% block breadcrumb %}
     {% endblock %}
   </ol>

@@ -205,3 +205,6 @@ def project_search_form(request):
         , [])
     
     return render(request, 'research_funding/project/search_form.html', { 'managers': managers })
+
+def home(request):
+    return render(request, 'research_funding/home.html', {})

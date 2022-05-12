@@ -12,4 +12,5 @@ urlpatterns = [
     path('manager/highest-funding', views.managers_highest_funding, name='managers_highest_funding'),
     path('project/search/<pattern>', views.project_search_json, name='project_search_json'),
     path('project/search', views.project_search_form, name='project_search_form'),
+    path('', views.home, name='home'),
 ]
