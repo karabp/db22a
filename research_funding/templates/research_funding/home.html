@@ -49,6 +49,27 @@
 	  </td>
 	  <td>A list of projects for each researcher that participates in them.</td>
 	</tr>
+	<tr>
+          <td>Scientific fields</td>
+	  <td>
+	    <a class="btn btn-primary active" role="button" aria-pressed="true" href="{% url 'scientific_field_index' %}">Scientific fields index</a>
+	  </td>
+	  <td>A list of all scientific fields, with links to specific scientific fields.</td>
+	</tr>
+	<tr>
+          <td>Scientific fields</td>
+	  <td>
+	    <a class="btn btn-primary active" role="button" aria-pressed="true" href="{% url 'scientific_field_pairs' %}">Top scientific field pairs</a>
+	  </td>
+	  <td>A list of top scientific fields shared by cross-field projects.</td>
+	</tr>
+	<tr>
+          <td>Managers, Organizations</td>
+	  <td>
+	    <a class="btn btn-primary active" role="button" aria-pressed="true" href="{% url 'managers_highest_funding' %}">Managers with highest funding</a>
+	  </td>
+	  <td>A list of the highest fundings given to an organization by a manager.</td>
+	</tr>
       </tbody>
     </table>
   </div>
