@@ -3,6 +3,10 @@ from django.conf import settings
 import os.path
 import pymysql.cursors
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 def mariadb_create_connection():
     return pymysql.connect(host='localhost',
                            user=settings.MARIADB['USER'],
@@ -59,7 +63,7 @@ def mariadb_select_one(query, args):
     connection = mariadb_create_connection()
     try:
         with connection.cursor() as cursor:
-            print(cursor.mogrify(query, args))
+            logger.debug('Executing SQL:\n' + cursor.mogrify(query, args))
             cursor.execute(query, args)
             result = cursor.fetchone()
     finally:
@@ -70,7 +74,7 @@ def mariadb_select_all(query, args):
     connection = mariadb_create_connection()
     try:
         with connection.cursor() as cursor:
-            print(cursor.mogrify(query, args))
+            logger.debug('Executing SQL:\n' + cursor.mogrify(query, args))
             cursor.execute(query, args)
             result = cursor.fetchall()
     finally:

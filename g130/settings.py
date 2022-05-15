@@ -25,6 +25,11 @@ SECRET_KEY = 'q4hl&-+jf&%&_5+1^ruoi8v=)7(e#^r6$r=(ccc$_zka_j((4v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+if DEBUG:
+    DATABASE_LOG_LEVEL = 'DEBUG'
+else:
+    DATABASE_LOG_LEVEL = 'INFO'
+
 ALLOWED_HOSTS = []
 
 
@@ -128,3 +133,26 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '[{levelname}] [{asctime}] [{module}] {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'research_funding.database': {
+            'handlers': ['console'],
+            'level': DATABASE_LOG_LEVEL,
+        },
+    },
+}
