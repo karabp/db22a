@@ -8,10 +8,13 @@
 <h2>Project search</h2>
 <form class="form-inline my-2 my-lg-0">
   <div class="form-group">
-    <label for="managerName">Manager name</label>
-    <select class="form-control" id="managerName" aria-describedby="managerNameHelp">
+    <label for="managerInput">Manager name</label>
+    <select class="form-control" id="managerInput" aria-describedby="managerNameHelp">
+      <option value='*'>
+	All managers
+      </option>
       {% for manager in managers %}
-      <option>
+      <option value='{{ manager.id }}'>
 	{{ manager.first_name }} {{ manager.last_name }}
       </option>
       {% endfor %}
@@ -22,7 +25,6 @@
     <input class="form-control" id="searchInput">
     </input>
   </div>
-  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 </form>
 <div id="searchResults">
 </div>

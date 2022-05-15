@@ -10,7 +10,6 @@
     <ul class="navbar-nav mr-auto">
       <li class="nav-item {% block link_home %}{% endblock %}">
 	<a class="nav-link" href="{% url 'home' %}">Home</a>
-</a>
       </li>
       <li class="nav-item dropdown {% block link_researchers %}{% endblock %}">
         <a class="nav-link dropdown-toggle" href="#" id="navbarResearchersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -39,7 +38,9 @@
           <a class="dropdown-item" href="{% url 'managers_highest_funding' %}">Highest Funding</a>
         </div>
       </li>
-    </ul>
+      
+</ul>
+    <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'project_search_form' %}">Search</a>
   </div>
 </nav>
 <nav aria-label="breadcrumb">

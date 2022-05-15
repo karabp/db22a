@@ -1,5 +1,6 @@
 var resultsElement = $("#searchResults");
 var searchInputElement = $("#searchInput")[0];
+var managerInputElement = $("#managerInput")[0];
 
 function highlight(s, term) {
     var tlen = term.length;
@@ -30,22 +31,39 @@ function highlight(s, term) {
     return result;
 }
 
-$("#searchInput").on("input", function(event) {
+function changeHandler(event) {
     $.ajax({
 	url: "{% url 'project_search_results_json' %}",
 	data: {
-	    term: searchInputElement.value
+	    project_title: searchInputElement.value,
+	    manager_id: managerInputElement.value
 	},
 	success: function(result) {
 	    var i, html = "";
-	    html += "<ul class=\"list-group list-group-flush\">";
+	    html += "<div class=\"d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom\">";
+	    html += "<div class=\"table-responsive\">";
+	    html += "<table class=\"table table-striped table-sm\">";
+	    html += "<thead>";
+	    html += "<th>Project title</th>";
+	    html += "<th>Manager last name</th>";
+	    html += "<th>Manager first name</th>";
+	    html += "</thead>";
+	    html += "<tbody>";
 	    for (i=0; i<result.results.length; i++) {
-		html += "<li class=\"list-group-item\">" +
-		    highlight(result.results[i].title, result.term) +
-		    "</li>";
+		html += "<tr>" +
+		    "<td>" + highlight(result.results[i].title, result.project_title_term) + "</td>" +
+		    "<td>" + result.results[i].manager_last_name + "</td>" +
+		    "<td>" + result.results[i].manager_first_name + "</td>" +
+		    "</tr>";
 	    }
-	    html += "</ul>";
+	    html += "</tbody>";
+	    html += "</table>";
+	    html += "</div>";
+	    html += "</div>";
 	    resultsElement.html(html);
 	}
     });
-});
+}
+
+$("#searchInput").on("input", changeHandler);
+$("#managerInput").on("input", changeHandler);

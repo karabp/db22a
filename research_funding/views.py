@@ -184,19 +184,38 @@ def managers_highest_funding(request):
 
 def project_search_results_json(request):
     try:
-        term = request.GET['term']
+        project_title_term = request.GET['project_title']
+        manager_id = request.GET['manager_id']
     except KeyError:
-        raise Http404("Searching requires a search term")
-    
-    projects = database.mariadb_select_all(
-        '''
-        SELECT project.id, project.title FROM project
-        WHERE project.title LIKE %s
+        raise Http404("Searching requires a search terms.\nValid search terms are 'manager_id' ('*' for all managers) and 'project_title' (empty for all projects)")
 
-        '''
-        , f'%{term}%')
+    if manager_id == '*':
+        projects = database.mariadb_select_all(
+            '''
+            SELECT project.id,
+                   project.title,
+                   person.first_name AS manager_first_name,
+                   person.last_name AS manager_last_name
+            FROM project INNER JOIN person
+            ON project.manager_id = person.id
+            WHERE project.title LIKE %s
+            '''
+            , f'%{project_title_term}%')
+    else:
+        projects = database.mariadb_select_all(
+            '''
+            SELECT project.id,
+                   project.title,
+                   person.first_name AS manager_first_name,
+                   person.last_name AS manager_last_name
+            FROM project INNER JOIN person
+            ON project.manager_id = person.id
+            WHERE project.title LIKE %s
+            AND project.manager_id = %s
+            '''
+            , (f'%{project_title_term}%', manager_id))
 
-    return JsonResponse({'term': term, 'results': projects})
+    return JsonResponse({'project_title_term': project_title_term, 'results': projects})
 
 def project_search_javascript(request):
     response = HttpResponse(content_type='application/javascript')
