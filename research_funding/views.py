@@ -186,34 +186,37 @@ def project_search_results_json(request):
     try:
         project_title_term = request.GET['project_title']
         manager_id = request.GET['manager_id']
+        program_name = request.GET['program_name']
+        department_name = request.GET['department_name']
     except KeyError:
-        raise Http404("Searching requires a search terms.\nValid search terms are 'manager_id' ('*' for all managers) and 'project_title' (empty for all projects)")
+        raise Http404("Searching requires a search terms.\nValid search terms are 'program_name' and 'department_name' ('*' for all programs), 'manager_id' ('*' for all managers) and 'project_title' (empty for all projects)")
 
-    if manager_id == '*':
-        projects = database.mariadb_select_all(
-            '''
-            SELECT project.id,
-                   project.title,
-                   person.first_name AS manager_first_name,
-                   person.last_name AS manager_last_name
-            FROM project INNER JOIN person
-            ON project.manager_id = person.id
-            WHERE project.title LIKE %s
-            '''
-            , f'%{project_title_term}%')
-    else:
-        projects = database.mariadb_select_all(
-            '''
-            SELECT project.id,
-                   project.title,
-                   person.first_name AS manager_first_name,
-                   person.last_name AS manager_last_name
-            FROM project INNER JOIN person
-            ON project.manager_id = person.id
-            WHERE project.title LIKE %s
-            AND project.manager_id = %s
-            '''
-            , (f'%{project_title_term}%', manager_id))
+    manager_glob = manager_id == '*'
+    if manager_glob:
+        manager_id = 0
+    program_glob = program_name == '*' or department_name == '*'
+    if program_glob:
+        program_name = ''
+        department_name = ''
+    
+    projects = database.mariadb_select_all(
+        '''
+        SELECT project.id,
+               project.title,
+               project.funding_program_name AS program_name,
+               project.funding_program_department_name AS department_name,
+               person.first_name AS manager_first_name,
+               person.last_name AS manager_last_name
+        FROM project INNER JOIN person
+        ON project.manager_id = person.id
+        WHERE project.title LIKE %s
+        AND (%s OR project.manager_id = %s)
+        AND (%s OR project.funding_program_name = %s)
+        AND (%s OR project.funding_program_department_name = %s)
+        '''
+        , (f'%{project_title_term}%', manager_glob, manager_id,
+                                      program_glob, program_name,
+                                      program_glob, department_name))
 
     return JsonResponse({'project_title_term': project_title_term, 'results': projects})
 
@@ -232,10 +235,20 @@ def project_search_form(request):
         FROM manager
         INNER JOIN person
         ON manager.id = person.id
+        ORDER BY last_name ASC, first_name ASC
+        '''
+        , [])
+
+    programs = database.mariadb_select_all(
+        '''
+        SELECT program.name,
+               program.department_name
+        FROM program
+        ORDER BY department_name ASC, name ASC
         '''
         , [])
     
-    return render(request, 'research_funding/project/search_form.html', { 'managers': managers })
+    return render(request, 'research_funding/project/search_form.html', { 'managers': managers, 'programs': programs })
 
 def home(request):
     return render(request, 'research_funding/home.html', {})

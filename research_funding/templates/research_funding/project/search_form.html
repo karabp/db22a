@@ -4,29 +4,53 @@
 
 {% block title %}Project search{% endblock %}
 
+{% block breadcrumb %}
+<li class="breadcrumb-item">Project</li>
+<li class="breadcrumb-item active" aria-current="page">Search</li>
+{% endblock %}
+
 {% block main %}
-<h2>Project search</h2>
-<form class="form-inline my-2 my-lg-0">
-  <div class="form-group">
-    <label for="managerInput">Manager name</label>
-    <select class="form-control" id="managerInput" aria-describedby="managerNameHelp">
-      <option value='*'>
-	All managers
-      </option>
-      {% for manager in managers %}
-      <option value='{{ manager.id }}'>
-	{{ manager.first_name }} {{ manager.last_name }}
-      </option>
-      {% endfor %}
-    </select>
-    <small id="managerNameHelp" class="form-text text-muted">The manager of the project.</small>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 order-md-1">
+      <div class="mb-3">
+        <label for="">Project title</label>
+        <input type="text" class="form-control" id="searchInput" placeholder="Search inside the project title">
+      </div>
+
+      <div class="row">
+        <div class="col-md-8 mb-3">
+          <label for="country">Department and program</label>
+	  <select class="custom-select d-block w-100" id="programInput">
+	    <option value='*,*'>
+	      All programs
+	    </option>
+	    {% for program in programs %}
+	    <option value='{{ program.name }},{{ program.department_name }}'>
+	      {{ program.department_name }}: {{ program.name  }}
+	    </option>
+	    {% endfor %}
+	  </select>
+        </div>
+	<div class="col-md-4 mb-3">
+          <label for="country">Manager</label>
+	  <select class="custom-select d-block w-100" id="managerInput">
+	    <option value='*'>
+	      All managers
+	    </option>
+	    {% for manager in managers %}
+	    <option value='{{ manager.id }}'>
+	      {{ manager.last_name }} {{ manager.first_name }}
+	    </option>
+	    {% endfor %}
+	  </select>
+        </div>
+      </div>
+      <hr class="mb-4">
+      <div id="searchResults">
+      </div>
+    </div>
   </div>
-  <div class="form-group">
-    <input class="form-control" id="searchInput">
-    </input>
-  </div>
-</form>
-<div id="searchResults">
 </div>
 {% endblock %}
 

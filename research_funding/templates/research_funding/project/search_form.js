@@ -1,5 +1,6 @@
 var resultsElement = $("#searchResults");
 var searchInputElement = $("#searchInput")[0];
+var programInputElement = $("#programInput")[0];
 var managerInputElement = $("#managerInput")[0];
 
 function highlight(s, term) {
@@ -32,10 +33,15 @@ function highlight(s, term) {
 }
 
 function changeHandler(event) {
+    program_and_department_name = programInputElement.value.split(",");
+    program_name = program_and_department_name[0];
+    department_name = program_and_department_name[1];
     $.ajax({
 	url: "{% url 'project_search_results_json' %}",
 	data: {
 	    project_title: searchInputElement.value,
+	    program_name: program_name,
+	    department_name: department_name,
 	    manager_id: managerInputElement.value
 	},
 	success: function(result) {
@@ -45,6 +51,8 @@ function changeHandler(event) {
 	    html += "<table class=\"table table-striped table-sm\">";
 	    html += "<thead>";
 	    html += "<th>Project title</th>";
+	    html += "<th>Department name</th>";
+	    html += "<th>Program name</th>";
 	    html += "<th>Manager last name</th>";
 	    html += "<th>Manager first name</th>";
 	    html += "</thead>";
@@ -52,6 +60,8 @@ function changeHandler(event) {
 	    for (i=0; i<result.results.length; i++) {
 		html += "<tr>" +
 		    "<td>" + highlight(result.results[i].title, result.project_title_term) + "</td>" +
+		    "<td>" + result.results[i].department_name + "</td>" +
+		    "<td>" + result.results[i].program_name + "</td>" +
 		    "<td>" + result.results[i].manager_last_name + "</td>" +
 		    "<td>" + result.results[i].manager_first_name + "</td>" +
 		    "</tr>";
@@ -66,4 +76,7 @@ function changeHandler(event) {
 }
 
 $("#searchInput").on("input", changeHandler);
+$("#programInput").on("input", changeHandler);
 $("#managerInput").on("input", changeHandler);
+
+changeHandler();
