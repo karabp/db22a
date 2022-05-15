@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, Http404
+from django.template import loader
 
 from research_funding import database, helpers
 
@@ -181,16 +182,27 @@ def managers_highest_funding(request):
 
     return render(request, 'research_funding/manager/highest_funding.html', {'managers_organizations': managers_organizations})
 
-def project_search_json(request, pattern):
+def project_search_results_json(request):
+    try:
+        term = request.GET['term']
+    except KeyError:
+        raise Http404("Searching requires a search term")
+    
     projects = database.mariadb_select_all(
         '''
         SELECT project.id, project.title FROM project
         WHERE project.title LIKE %s
 
         '''
-        , f'%{pattern}%')
+        , f'%{term}%')
 
-    return JsonResponse({'result': projects})
+    return JsonResponse({'term': term, 'results': projects})
+
+def project_search_javascript(request):
+    response = HttpResponse(content_type='application/javascript')
+    t = loader.get_template('research_funding/project/search_form.js')
+    response.write(t.render({}))
+    return response
 
 def project_search_form(request):
     managers = database.mariadb_select_all(

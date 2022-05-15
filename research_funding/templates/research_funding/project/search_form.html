@@ -1,10 +1,12 @@
 {% extends 'research_funding/base.html' %}
 
+{% load static %}
+
 {% block title %}Project search{% endblock %}
 
-{% block content %}
-<h1>Project search</h1>
-<form>
+{% block main %}
+<h2>Project search</h2>
+<form class="form-inline my-2 my-lg-0">
   <div class="form-group">
     <label for="managerName">Manager name</label>
     <select class="form-control" id="managerName" aria-describedby="managerNameHelp">
@@ -16,6 +18,20 @@
     </select>
     <small id="managerNameHelp" class="form-text text-muted">The manager of the project.</small>
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <div class="form-group">
+    <input class="form-control" id="searchInput">
+    </input>
+  </div>
+  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 </form>
+<div id="searchResults">
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+<script src="{% url 'project_search_javascript' %}"></script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/research_funding/project/search.css' %}">
 {% endblock %}
