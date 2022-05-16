@@ -66,7 +66,7 @@ function changeHandler(event) {
 	    html += "<th>Manager first name</th>";
 	    html += "<th>Start date</th>";
 	    html += "<th>Duration <span class=\"text-muted\">(in days)</span></th>";
-	    html += "<th>Page</th>";
+	    html += "<th>Details</th>";
 	    html += "</thead>";
 	    html += "<tbody>";
 	    for (i=0; i<result.results.length; i++) {
