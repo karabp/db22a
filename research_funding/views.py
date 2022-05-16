@@ -357,5 +357,27 @@ def project_details(request, id):
         ''', id)
 
     scientific_field_titles = [sf['title'] for sf in scientific_fields]
-    
-    return render(request, 'research_funding/project/details.html', { 'project': project, 'scientific_field_titles': scientific_field_titles })
+
+    researchers = database.mariadb_select_all(
+        '''
+        SELECT person.first_name,
+               person.last_name
+        FROM person
+        INNER JOIN researcher_participates_in_project AS participates
+        ON participates.researcher_id = person.id
+        WHERE participates.project_id = %s
+        ORDER BY person.last_name ASC, person.first_name ASC
+        ''', id)
+
+    researcher_names = [r['last_name'] + ' ' + r['first_name'] for r in researchers]
+
+    deliverables = database.mariadb_select_all(
+        '''
+        SELECT deliverable.title,
+               deliverable.delivery_date
+        FROM deliverable
+        WHERE deliverable.project_id = %s
+        ORDER BY deliverable.delivery_date ASC
+        ''', id)
+
+    return render(request, 'research_funding/project/details.html', { 'project': project, 'scientific_field_titles': scientific_field_titles, 'researcher_names': researcher_names, 'deliverables': deliverables })

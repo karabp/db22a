@@ -1,5 +1,7 @@
 {% extends 'research_funding/base.html' %}
 
+{% load static %}
+
 {% block title %}Project '{{ project.title }}'{% endblock %}
 
 {% block breadcrumb %}
@@ -9,7 +11,7 @@
 
 {% block main %}
 <h2>Details for project: {{ project.title }}</h2>
-<dl class="list-group">
+<dl>
   <dt>Id</dt>
   <dd>Project {{ project.id }}</dd>
   <dt>Title</dt>
@@ -18,12 +20,29 @@
   <dd>{{ project.abstract }}</dd>
   <dt>Scientific Fields</dt>
   <dd>
+    {% if scientific_field_titles %}
     {{ scientific_field_titles|join:', ' }}
+    {% else %}
+    <span class="text-muted">None</span>
+    {% endif %}
   </dd>
   <dt>Start Date</dt>
   <dd>{{ project.start_date }}</dd>
   <dt>End Date</dt>
   <dd>{{ project.end_date }}</dd>
+  <dt>Deliverables</dt>
+  <dd>
+    {% if deliverables  %}
+    <dl class="nested-dl">
+      {% for deliverable in deliverables %}
+      <dt>{{ deliverable.delivery_date }}</dt>
+      <dd>{{ deliverable.title }}</dd>
+      {% endfor %}
+    </dl>
+    {% else %}
+    <span class="text-muted">None</span>
+    {% endif %}
+  </dd>
   <dt>Review Date</dt>
   <dd>{{ project.review_date }}</dd>
   <dt>Review Grade</dt>
@@ -32,6 +51,14 @@
   <dd>{{ project.reviewer_last_name }} {{ project.reviewer_first_name }}</dd>
   <dt>Scientific Lead</dt>
   <dd>{{ project.scientific_lead_last_name }} {{ project.scientific_lead_first_name }}</dd>
+  <dt>Researchers</dt>
+  <dd>
+    {% if researcher_names  %}
+    {{ researcher_names|join:', ' }}
+    {% else %}
+    <span class="text-muted">None</span>
+    {% endif %}
+  </dd>
   <dt>Organization</dt>
   <dd>{{ project.organization_name }} ({{ project.organization_acronym }}, <span class="text-muted">{{ project.organization_type}}</span>)</dd>
   <dt>Manager</dt>
@@ -39,4 +66,8 @@
   <dt>Funding Amount</dt>
   <dd>{{ project.funding_amount }}</dd>
 </dl>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/research_funding/project/details.css' %}">
 {% endblock %}
