@@ -14,4 +14,5 @@ urlpatterns = [
     path('project/search/javascript', views.project_search_javascript, name='project_search_javascript'),
     path('project/search', views.project_search_form, name='project_search_form'),
     path('', views.home, name='home'),
+    path('project/details/<int:id>', views.project_details, name='project_details'),
 ]

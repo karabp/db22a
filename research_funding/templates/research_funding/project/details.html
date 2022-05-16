@@ -1,0 +1,42 @@
+{% extends 'research_funding/base.html' %}
+
+{% block title %}Project '{{ project.title }}'{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'project_search_form' %}">Projects</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ project.title }}</li>
+{% endblock %}
+
+{% block main %}
+<h2>Details for project: {{ project.title }}</h2>
+<dl class="list-group">
+  <dt>Id</dt>
+  <dd>Project {{ project.id }}</dd>
+  <dt>Title</dt>
+  <dd>{{ project.title }}</dd>
+  <dt>Abstract</dt>
+  <dd>{{ project.abstract }}</dd>
+  <dt>Scientific Fields</dt>
+  <dd>
+    {{ scientific_field_titles|join:', ' }}
+  </dd>
+  <dt>Start Date</dt>
+  <dd>{{ project.start_date }}</dd>
+  <dt>End Date</dt>
+  <dd>{{ project.end_date }}</dd>
+  <dt>Review Date</dt>
+  <dd>{{ project.review_date }}</dd>
+  <dt>Review Grade</dt>
+  <dd>{{ project.review_grade }}</dd>
+  <dt>Reviewer</dt>
+  <dd>{{ project.reviewer_last_name }} {{ project.reviewer_first_name }}</dd>
+  <dt>Scientific Lead</dt>
+  <dd>{{ project.scientific_lead_last_name }} {{ project.scientific_lead_first_name }}</dd>
+  <dt>Organization</dt>
+  <dd>{{ project.organization_name }} ({{ project.organization_acronym }}, <span class="text-muted">{{ project.organization_type}}</span>)</dd>
+  <dt>Manager</dt>
+  <dd>{{ project.manager_last_name }} {{ project.manager_first_name }}</dd>
+  <dt>Funding Amount</dt>
+  <dd>{{ project.funding_amount }}</dd>
+</dl>
+{% endblock %}

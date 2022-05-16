@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, Http404
 from django.template import loader
+from django.urls import reverse
 
 from research_funding import database, helpers
 
@@ -246,8 +247,10 @@ def project_search_results_json(request):
         AND (%s OR project.funding_program_department_name = %s)
         AND (%s OR project.start_date >= %s)
         AND (%s OR project.start_date <= %s)
-        AND (%s OR project.duration >= %s * 30)
-        AND (%s OR project.duration <= %s * 30)
+        AND (%s OR ADDDATE(project.start_date, INTERVAL %s MONTH) 
+                   <= ADDDATE(project.start_date, project.duration))
+        AND (%s OR ADDDATE(project.start_date, INTERVAL %s MONTH) 
+                   >= ADDDATE(project.start_date, project.duration))
         '''
         , (f'%{project_title_term}%', manager_glob, manager_id,
                                       program_glob, program_name,
@@ -257,6 +260,9 @@ def project_search_results_json(request):
                                       duration_min_glob, duration_min,
                                       duration_max_glob, duration_max))
 
+    for project in projects:
+        project['link'] = reverse('project_details', kwargs={'id': project['id']})
+    
     return JsonResponse({'project_title_term': project_title_term, 'results': projects})
 
 def project_search_javascript(request):
@@ -307,3 +313,49 @@ def project_search_form(request):
 
 def home(request):
     return render(request, 'research_funding/home.html', {})
+
+def project_details(request, id):
+    project = database.mariadb_select_one(
+        '''
+        SELECT project.id,
+               project.title,
+               project.abstract,
+               project.start_date,
+               project.funding_amount,
+               ADDDATE(project.start_date, project.duration) AS end_date,
+               project.review_date,
+               project.review_grade,
+               organization.name AS organization_name,
+               organization.acronym AS organization_acronym,
+               organization.type AS organization_type,
+               reviewer.first_name AS reviewer_first_name,
+               reviewer.last_name AS reviewer_last_name,
+               scientific_lead.first_name AS scientific_lead_first_name,
+               scientific_lead.last_name AS scientific_lead_last_name,
+               manager.first_name AS manager_first_name,
+               manager.last_name AS manager_last_name
+        FROM project
+        INNER JOIN person AS reviewer
+        INNER JOIN person AS manager
+        INNER JOIN person AS scientific_lead
+        INNER JOIN organization
+        ON project.reviewer_id = reviewer.id
+        AND project.manager_id = manager.id
+        AND project.scientific_lead_id = scientific_lead.id
+        AND organization.name = project.managing_organization_name
+        WHERE project.id = %s
+        '''
+        , id)
+
+    scientific_fields = database.mariadb_select_all(
+        '''
+        SELECT scientific_field.title
+        FROM scientific_field
+        INNER JOIN project_relates_to_scientific_field AS relates
+        ON relates.scientific_field_title = scientific_field.title
+        WHERE relates.project_id = %s
+        ''', id)
+
+    scientific_field_titles = [sf['title'] for sf in scientific_fields]
+    
+    return render(request, 'research_funding/project/details.html', { 'project': project, 'scientific_field_titles': scientific_field_titles })

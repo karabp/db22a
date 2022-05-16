@@ -66,6 +66,7 @@ function changeHandler(event) {
 	    html += "<th>Manager first name</th>";
 	    html += "<th>Start date</th>";
 	    html += "<th>Duration <span class=\"text-muted\">(in days)</span></th>";
+	    html += "<th>Page</th>";
 	    html += "</thead>";
 	    html += "<tbody>";
 	    for (i=0; i<result.results.length; i++) {
@@ -77,6 +78,7 @@ function changeHandler(event) {
 		    "<td>" + result.results[i].manager_first_name + "</td>" +
 		    "<td>" + result.results[i].start_date + "</td>" +
 		    "<td>" + result.results[i].duration + "</td>" +
+		    "<td><a href=\"" + result.results[i].link + "\" class=\"btn btn-block btn-outline-primary\">Open</a></td>" +
 		    "</tr>";
 	    }
 	    html += "</tbody>";
