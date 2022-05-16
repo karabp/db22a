@@ -2,6 +2,10 @@ var resultsElement = $("#searchResults");
 var searchInputElement = $("#searchInput")[0];
 var programInputElement = $("#programInput")[0];
 var managerInputElement = $("#managerInput")[0];
+var dateMinInputElement = $("#dateMinInput")[0];
+var dateMaxInputElement = $("#dateMaxInput")[0];
+var durationMinInputElement = $("#durationMinInput")[0];
+var durationMaxInputElement = $("#durationMaxInput")[0];
 
 function highlight(s, term) {
     var tlen = term.length;
@@ -42,8 +46,13 @@ function changeHandler(event) {
 	    project_title: searchInputElement.value,
 	    program_name: program_name,
 	    department_name: department_name,
-	    manager_id: managerInputElement.value
+	    manager_id: managerInputElement.value,
+	    start_date_min: dateMinInputElement.value,
+	    start_date_max: dateMaxInputElement.value,
+	    duration_min: durationMinInputElement.value,
+	    duration_max: durationMaxInputElement.value
 	},
+
 	success: function(result) {
 	    var i, html = "";
 	    html += "<div class=\"d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom\">";
@@ -55,6 +64,8 @@ function changeHandler(event) {
 	    html += "<th>Program name</th>";
 	    html += "<th>Manager last name</th>";
 	    html += "<th>Manager first name</th>";
+	    html += "<th>Start date</th>";
+	    html += "<th>Duration <span class=\"text-muted\">(in days)</span></th>";
 	    html += "</thead>";
 	    html += "<tbody>";
 	    for (i=0; i<result.results.length; i++) {
@@ -64,6 +75,8 @@ function changeHandler(event) {
 		    "<td>" + result.results[i].program_name + "</td>" +
 		    "<td>" + result.results[i].manager_last_name + "</td>" +
 		    "<td>" + result.results[i].manager_first_name + "</td>" +
+		    "<td>" + result.results[i].start_date + "</td>" +
+		    "<td>" + result.results[i].duration + "</td>" +
 		    "</tr>";
 	    }
 	    html += "</tbody>";
@@ -75,8 +88,24 @@ function changeHandler(event) {
     });
 }
 
+function reset(event) {
+    searchInputElement.value = "";
+    programInputElement.value = "*,*";
+    managerInputElement.value = "*";
+    durationMinInputElement.value = 12;
+    durationMaxInputElement.value = 48;
+    dateMinInputElement.value = "{{ start_date_limits.min.isoformat }}"
+    dateMaxInputElement.value = "{{ start_date_limits.max.isoformat }}"
+    changeHandler();
+}
+
 $("#searchInput").on("input", changeHandler);
 $("#programInput").on("input", changeHandler);
 $("#managerInput").on("input", changeHandler);
+$("#dateMinInput").on("input", changeHandler);
+$("#dateMaxInput").on("input", changeHandler);
+$("#durationMinInput").on("input", changeHandler)
+$("#durationMaxInput").on("input", changeHandler);
+$("#resetBtn").on("click", reset);
 
 changeHandler();

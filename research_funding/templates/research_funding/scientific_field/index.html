@@ -28,7 +28,7 @@
           <td>{{ scientific_field.description }}</td>
 	  <td>{{ scientific_field.project_count }}</td>
           <td>
-	      <a class="btn btn-outline-primary" role="button" aria-pressed="true" href="{% url 'scientific_field_projects_and_researchers' scientific_field.title|slugify %}">Open</a>
+	      <a class="btn btn-block btn-outline-primary" role="button" aria-pressed="true" href="{% url 'scientific_field_projects_and_researchers' scientific_field.title|slugify %}">Open</a>
 	  </td>
 	</tr>
 	{% endfor %}

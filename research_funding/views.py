@@ -188,8 +188,12 @@ def project_search_results_json(request):
         manager_id = request.GET['manager_id']
         program_name = request.GET['program_name']
         department_name = request.GET['department_name']
+        start_date_min = request.GET['start_date_min']
+        start_date_max = request.GET['start_date_max']
+        duration_min = request.GET['duration_min']
+        duration_max = request.GET['duration_max']
     except KeyError:
-        raise Http404("Searching requires a search terms.\nValid search terms are 'program_name' and 'department_name' ('*' for all programs), 'manager_id' ('*' for all managers) and 'project_title' (empty for all projects)")
+        raise Http404("Searching requires search terms.\nValid search terms are 'program_name' and 'department_name' ('*' for all programs), 'manager_id' ('*' for all managers) and 'project_title' (empty for all projects), 'start_date_min', 'start_date_max', 'duration_min' and 'duration_max'")
 
     manager_glob = manager_id == '*'
     if manager_glob:
@@ -198,11 +202,38 @@ def project_search_results_json(request):
     if program_glob:
         program_name = ''
         department_name = ''
-    
+
+    start_date_min_glob = False
+    start_date_max_glob = False
+    duration_min_glob = False
+    duration_max_glob = False
+    try:
+        start_date_min = datetime.date.fromisoformat(start_date_min)
+    except ValueError:
+        start_date_min_glob = True
+        start_date_min = datetime.date.today()
+    try:
+        start_date_max = datetime.date.fromisoformat(start_date_max)
+    except ValueError:
+        start_date_max_glob = True
+        start_date_max = datetime.date.today()
+    try:
+        duration_min = int(duration_min)
+    except ValueError:
+        duration_min_glob = True
+        duration_min = 0
+    try:
+        duration_max = int(duration_max)
+    except ValueError:
+        duration_max_glob = True
+        duration_max = 0
+        
     projects = database.mariadb_select_all(
         '''
         SELECT project.id,
                project.title,
+               project.start_date,
+               project.duration,
                project.funding_program_name AS program_name,
                project.funding_program_department_name AS department_name,
                person.first_name AS manager_first_name,
@@ -213,20 +244,44 @@ def project_search_results_json(request):
         AND (%s OR project.manager_id = %s)
         AND (%s OR project.funding_program_name = %s)
         AND (%s OR project.funding_program_department_name = %s)
+        AND (%s OR project.start_date >= %s)
+        AND (%s OR project.start_date <= %s)
+        AND (%s OR project.duration >= %s * 30)
+        AND (%s OR project.duration <= %s * 30)
         '''
         , (f'%{project_title_term}%', manager_glob, manager_id,
                                       program_glob, program_name,
-                                      program_glob, department_name))
+                                      program_glob, department_name,
+                                      start_date_min_glob, start_date_min,
+                                      start_date_max_glob, start_date_max,
+                                      duration_min_glob, duration_min,
+                                      duration_max_glob, duration_max))
 
     return JsonResponse({'project_title_term': project_title_term, 'results': projects})
 
 def project_search_javascript(request):
+    start_date_limits = database.mariadb_select_one(
+        '''
+        SELECT MIN(project.start_date) AS min,
+               MAX(project.start_date) AS max
+        FROM project
+        '''
+        , [])
+
     response = HttpResponse(content_type='application/javascript')
     t = loader.get_template('research_funding/project/search_form.js')
-    response.write(t.render({}))
+    response.write(t.render({ 'start_date_limits': start_date_limits }))
     return response
 
 def project_search_form(request):
+    start_date_limits = database.mariadb_select_one(
+        '''
+        SELECT MIN(project.start_date) AS min,
+               MAX(project.start_date) AS max
+        FROM project
+        '''
+        , [])
+
     managers = database.mariadb_select_all(
         '''
         SELECT manager.id,
@@ -248,7 +303,7 @@ def project_search_form(request):
         '''
         , [])
     
-    return render(request, 'research_funding/project/search_form.html', { 'managers': managers, 'programs': programs })
+    return render(request, 'research_funding/project/search_form.html', { 'managers': managers, 'programs': programs, 'start_date_limits': start_date_limits })
 
 def home(request):
     return render(request, 'research_funding/home.html', {})
