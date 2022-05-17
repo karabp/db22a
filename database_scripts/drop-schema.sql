@@ -1,3 +1,4 @@
+DROP VIEW IF EXISTS dual_role_people;
 DROP VIEW IF EXISTS projects_per_researcher;
 DROP VIEW IF EXISTS active_project;
 DROP TABLE IF EXISTS deliverable;

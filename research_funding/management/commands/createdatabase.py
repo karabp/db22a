@@ -14,6 +14,7 @@ class Command(BaseCommand):
                      ('create-schema.sql', False),
                      ('triggers/project_reviewer_cannot_work_for_managing_organization.sql', True),
                      ('views/projects_per_researcher.sql', True),
+                     ('views/dual_role_people.sql', True),
                      ('views/active_projects.sql', True)]:
             count = mariadb_execute_script(*file)
             self.stdout.write(self.style.SUCCESS(f'Successfully executed {count} statements from file \'{file[0]}\''))

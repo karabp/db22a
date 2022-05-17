@@ -381,3 +381,11 @@ def project_details(request, id):
         ''', id)
 
     return render(request, 'research_funding/project/details.html', { 'project': project, 'scientific_field_titles': scientific_field_titles, 'researcher_names': researcher_names, 'deliverables': deliverables })
+
+def managers_dual_role(request):
+    people = database.mariadb_select_all(
+        '''
+        SELECT * FROM dual_role_people
+        ''', [])
+
+    return render(request, 'research_funding/manager/dual_role.html', { 'people': people })
