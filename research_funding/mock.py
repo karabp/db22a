@@ -4,7 +4,7 @@ import itertools
 
 first_names_female = str.split('Mary,Helen,Isabelle,Meg,Kim,Anne,Margaret,Natalie,Erin,Patti', ",")
 first_names_male = str.split('John,Jack,Jonathan,Ed,Ned,Zach,Frank,Leonard,Joe,Graham', ',')
-last_names = str.split('White,Black,Menounos,Galifianakis,Deal,Gordon,Mellor,Parker,Lydon,Cohen,Stark', ',')
+last_names = str.split('White,Black,Menounos,Galifianakis,Deal,Gordon,Mellor,Parker,Lydon,Cohen,Stark,Twain,Norr,Fin,Hakly,Vany,Giorgion,Disny,Dussy,Prisly,Lifton,Breaton,Mink,Dalary,Johny,Erecson,Dumpy,Braunch,Branchy,Betterson,Dawny,Hakins,Fiskins,Miky,Beniam,Darian,Wildson,Pepperson,Margian,Strongson,Tremous,Kington,Piaf,Bolton,Watt,Renaut,Renauch,Stefanbos,Gandich,Brand,Lordish,Yardfan,Follilod', ',')
 
 birthdate_limits = (datetime.date(1940, 1, 1).toordinal(), datetime.date(2004, 1, 1).toordinal())
 
