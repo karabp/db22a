@@ -16,4 +16,5 @@ urlpatterns = [
     path('project/search', views.project_search_form, name='project_search_form'),
     path('', views.home, name='home'),
     path('project/details/<int:id>', views.project_details, name='project_details'),
+    path('organization/biannual-report', views.organizations_by_biannual_project_count, name='organization_biannual_report'),
 ]

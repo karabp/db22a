@@ -9,6 +9,6 @@ BEGIN
 	    ON researcher.employing_organization_name = organization.name
 	    WHERE researcher.id = NEW.reviewer_id))
 	THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'A project\'s reviewer may not work for the project\'s managing organization.';
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'A project reviewer may not work for the project managing organization.';
 	END IF;
 END;

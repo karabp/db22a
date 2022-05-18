@@ -23,8 +23,8 @@ paragraph_range = (5, 10)
 funding_limits = (100000, 1000000)
 organization_budget_limits = (1000000, 100000000)
 
-researcher_ratio = 0.8
-both_ratio = 0.1
+researcher_ratio = 0.9
+both_ratio = 0.05
 
 university_prefix = str.split('Unseen Univerity of,University of,Technical University of,National University of,National Technical University of', ',')
 research_center_suffix = str.split('Research Center,Research Group', ',')

@@ -16,7 +16,7 @@ class Command(BaseCommand):
         if seed:
             random.seed(seed[0])
 
-        organization_n = 500
+        organization_n = 50
         university_n = 0
         research_center_n = 0
         company_n = 0
@@ -96,7 +96,7 @@ class Command(BaseCommand):
         mariadb_insert_many("INSERT INTO manager VALUES (%s)", manager_ids)
         self.stdout.write(self.style.SUCCESS(f'Successfully created {len(manager_ids)} managers.'))
 
-        project_n = 1000
+        project_n = 5000
         
         for _ in range(project_n):
             project = mock.generate_project(researcher_and_organization_ids, manager_ids, program_ids, organization_ids)
@@ -108,7 +108,7 @@ class Command(BaseCommand):
         project_ids_dict = mariadb_select_all('SELECT id FROM project', []);
         project_ids = [p['id'] for p in project_ids_dict]
         
-        participation_n = 5000
+        participation_n = 8000
         participations = []
         for _ in range(participation_n):
             participation = mock.generate_participation(researcher_ids, project_ids)

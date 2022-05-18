@@ -389,3 +389,40 @@ def managers_dual_role(request):
         ''', [])
 
     return render(request, 'research_funding/manager/dual_role.html', { 'people': people })
+
+def organizations_by_biannual_project_count(request):
+    report = database.mariadb_select_all(
+        '''
+        WITH
+          organization_year_project_count AS
+             (SELECT
+                  YEAR(project.start_date) AS year,
+                  organization.name AS organization,
+                  COUNT(project.id) AS yearly_project_count
+              FROM organization
+              INNER JOIN project
+              ON project.managing_organization_name = organization.name
+              GROUP BY year, organization
+              HAVING yearly_project_count >= 10),
+        organization_period_project_count AS
+             (SELECT
+                  year div 2 AS period,
+                  organization,
+                  SUM(yearly_project_count) AS project_count
+              FROM organization_year_project_count
+              GROUP BY period, organization
+              HAVING COUNT(year) = 2
+              ORDER BY organization)
+        SELECT period*2 AS period_first_year,
+               period*2+1 AS period_second_year,
+               project_count,
+               GROUP_CONCAT(organization) AS organizations_comma_separated
+               FROM organization_period_project_count
+               GROUP BY period, project_count
+               ORDER BY period, project_count
+        ''', [])
+
+    for element in report:
+        element['organizations'] = element['organizations_comma_separated'].split(',')
+    
+    return render(request, 'research_funding/organization/biannual_report.html', { 'report': report })
